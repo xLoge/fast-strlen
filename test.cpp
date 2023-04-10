@@ -1,6 +1,7 @@
 #include <iostream>
 #include <chrono>
 #include <random>
+#include <cstring>
 
 template<class TIME = std::milli>
 class Timer
@@ -34,12 +35,12 @@ public:
 	void print()
 	{
 		const auto current = this->current();
+		std::cout << m_Name << " took " << current * m_Multiplier;
 
-		printf("%s took %.3LF", m_Name, current * m_Multiplier);
 #if _HAS_CXX20
 		std::chrono::_Write_unit_suffix<TIME>(std::cout);
 #endif
-		printf("\n");
+		std::cout << '\n';
 	}
 
 	void disable_output()
@@ -89,7 +90,7 @@ int main()
 {
 	std::random_device rd;
 	std::mt19937_64 mt(rd());
-	std::uniform_int_distribution<size_t> dist(500000000, 15000000000);
+	std::uniform_int_distribution<size_t> dist(14000000000, 15000000000);
 	
 	const auto RAND = dist(mt);
 
@@ -123,5 +124,5 @@ int main()
 
 	const double test_time = std_time / fast_time;
 
-	std::cout << "fast_strlen was " << test_time << "x faster and the results are " << (fast_res == std_res ? "equal" : "not equal") << "\n";
+	std::cout << "fast_strlen was " << test_time << (test_time > 1.0 ? "x faster" : "x slower") << " and the results are " << (fast_res == std_res ? "equal" : "not equal") << "\n";
 }
