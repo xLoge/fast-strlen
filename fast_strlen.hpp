@@ -8,7 +8,7 @@ constexpr inline size_t fast_strlen(const char_type* _begin)
 	const size_t* aligned_end = reinterpret_cast<const size_t*>(_begin);
 	const char_type* end = _begin;
 
-	// Check 8 bytes at once without simd instructions
+	// Check 8 (or 4 with x86) bytes at once without simd instructions
 	for (size_t data;;) {
 		data = *aligned_end++;
 		if ((data - mask_low) & (~data) & mask_high) {
